@@ -8,6 +8,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using UserExperienceAnalizer.Common.Models;
+using UserExperienceAnalizer.Common.Validation;
 using UserExperienceAnalizer.Service.Services;
 
 namespace UserExperienceAnalizer.API.Controllers
@@ -29,10 +30,26 @@ namespace UserExperienceAnalizer.API.Controllers
         [Route("InitRequest")]
         public IActionResult InitRequest([FromBody] KeyStrokeModel request)
         {
-            _globalVar.UserID = Guid.NewGuid();
-            _globalVar.Organization = request.OrganizationName;
 
-            return Ok("Sucess");
+            try
+            {
+                _globalVar.UserID = Guid.NewGuid();
+
+                InputValidation.ValidateOraganization(request.OrganizationName, "OrganizationName Cannot be empty");
+                _globalVar.Organization = request.OrganizationName;
+
+                return Ok(new
+                {
+                    Message = "Success"
+                });
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new
+                {
+                    Message = e.Message
+                });
+            }
         }
 
         [HttpPost]
@@ -43,8 +60,25 @@ namespace UserExperienceAnalizer.API.Controllers
             request.Id = _globalVar.UserID;
             request.OrganizationName = _globalVar.Organization;
 
-            applicationService.CaptureKeyStorokes(request);
-            return Ok(request);
+            try
+            {
+                applicationService.CaptureKeyStorokes(request);
+                var msg = new
+                {
+                    Message = "Success!"
+                };
+
+                return Ok(msg);
+            }
+            catch(Exception ex)
+            {
+                var msg = new
+                {
+                    Message = ex.Message
+                };
+
+                return BadRequest(msg);
+            }
         }
     }
 }

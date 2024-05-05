@@ -17,11 +17,11 @@ namespace UserExperienceAnalizer.Service.Services
 
         public void CaptureKeyStorokes(KeyStrokeModel request)
         {
+            InputValidation.ValidateOraganization(request.OrganizationName);
             InputValidation.ValidateStartDate(request.StartDate);
             InputValidation.ValidateEndDate(request.EndDate);
             InputValidation.ValidateStartTime(request.StartTime);
-            InputValidation.ValidateEndTime(request.EndTime);
-            InputValidation.ValidateOraganization(request.OrganizationName);
+            InputValidation.ValidateEndTime(request.EndTime);          
             InputValidation.ValidateScreenName(request.ScreenName);
 
             var client = firebase.InitFirebaseClient();
