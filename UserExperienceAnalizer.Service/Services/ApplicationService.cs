@@ -17,8 +17,10 @@ namespace UserExperienceAnalizer.Service.Services
 
         public void CaptureKeyStorokes(KeyStrokeModel request)
         {
-            InputValidation.ValidateStartDate(request.StartTime);
-            InputValidation.ValidateEndDate(request.EndTime);
+            InputValidation.ValidateStartDate(request.StartDate);
+            InputValidation.ValidateEndDate(request.EndDate);
+            InputValidation.ValidateStartTime(request.StartTime);
+            InputValidation.ValidateEndTime(request.EndTime);
             InputValidation.ValidateOraganization(request.OrganizationName);
             InputValidation.ValidateScreenName(request.ScreenName);
 

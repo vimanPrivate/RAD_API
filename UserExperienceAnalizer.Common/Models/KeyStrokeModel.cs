@@ -8,7 +8,9 @@ namespace UserExperienceAnalizer.Common.Models
     public class KeyStrokeModel
     {
         public string StartTime { get; set; }
+        public string StartDate { get; set; }
         public string EndTime { get; set; }
+        public string EndDate { get; set; }
         public string ScreenName { get; set; }
         public bool IsFinalGoal { get; set; }
         public Guid Id { get; set; }
