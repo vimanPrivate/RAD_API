@@ -27,7 +27,6 @@ namespace UserExperienceAnalizer.API.Controllers
             this.applicationService = new ApplicationService();
             _globalVar = globalVar;
         }
-
         
         [HttpPost]
         [Route("InitRequest")]
