@@ -7,10 +7,10 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:3.1 AS build
 WORKDIR /src
-COPY ["UserExperienceAnalizer.API/UserExperienceAnalizer.API.csproj", "UserExperienceAnalizer.API/"]
-RUN dotnet restore "UserExperienceAnalizer.API/UserExperienceAnalizer.API.csproj"
+COPY ["UserExperienceAnalizer.API.csproj", ""]
+RUN dotnet restore "./UserExperienceAnalizer.API.csproj"
 COPY . .
-WORKDIR "/src/UserExperienceAnalizer.API"
+WORKDIR "/src/."
 RUN dotnet build "UserExperienceAnalizer.API.csproj" -c Release -o /app/build
 
 FROM build AS publish
