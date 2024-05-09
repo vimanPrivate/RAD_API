@@ -8,10 +8,10 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-using UserExperienceAnalizer.Common.Models;
-using UserExperienceAnalizer.Common.Validation;
-using UserExperienceAnalizer.Service.Services;
-using UserExperienceAnalizer.Common.Validation;
+//using UserExperienceAnalizer.Common.Models;
+//using UserExperienceAnalizer.Common.Validation;
+//using UserExperienceAnalizer.Service.Services;
+//using UserExperienceAnalizer.Common.Validation;
 
 namespace UserExperienceAnalizer.API.Controllers
 {
