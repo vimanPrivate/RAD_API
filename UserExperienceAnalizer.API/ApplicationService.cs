@@ -22,6 +22,8 @@ namespace UserExperienceAnalizer.API
             InputValidation.ValidateEndTime(request.EndTime);
             InputValidation.ValidateScreenName(request.ScreenName);
 
+            request.CreatedDateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+
             var client = firebase.InitFirebaseClient();
             var response = client.Push(request.OrganizationName + "/", request);
         }

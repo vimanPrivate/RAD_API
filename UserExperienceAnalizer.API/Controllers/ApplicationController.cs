@@ -59,7 +59,6 @@ namespace UserExperienceAnalizer.API.Controllers
         [Route("CaptureKeyStorokes")]
         public IActionResult CaptureKeyStorokes([FromBody] KeyStrokeModel request)
         {
-
             request.Id = _globalVar.UserID;
             request.OrganizationName = _globalVar.Organization;
 
