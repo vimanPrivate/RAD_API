@@ -10,11 +10,13 @@ using System.Threading.Tasks;
 using UserExperienceAnalizer.Common.Models;
 using UserExperienceAnalizer.Common.Validation;
 using UserExperienceAnalizer.Service.Services;
+using UserExperienceAnalizer.Common.Validation;
 
 namespace UserExperienceAnalizer.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [AllowAnonymous]
     public class ApplicationController : ControllerBase
     {
         private readonly GlobalVar _globalVar;
