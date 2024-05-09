@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -15,6 +16,7 @@ namespace UserExperienceAnalizer.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [AllowAnonymous]
     public class ApplicationController : ControllerBase
     {
         private readonly GlobalVar _globalVar;
@@ -26,6 +28,7 @@ namespace UserExperienceAnalizer.API.Controllers
             _globalVar = globalVar;
         }
 
+        
         [HttpPost]
         [Route("InitRequest")]
         public IActionResult InitRequest([FromBody] KeyStrokeModel request)
