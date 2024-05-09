@@ -14,6 +14,7 @@
   <ItemGroup>
     <ProjectReference Include="..\UserExperienceAnalizer.Common\UserExperienceAnalizer.Common.csproj" />
     <ProjectReference Include="..\UserExperienceAnalizer.Service\UserExperienceAnalizer.Service.csproj" />
+    <ProjectReference Include="..\UserExperienceAnalizer.Data\UserExperienceAnalizer.Data.csproj" />
   </ItemGroup>
 
 
