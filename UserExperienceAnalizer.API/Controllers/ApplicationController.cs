@@ -47,6 +47,21 @@ namespace UserExperienceAnalizer.API.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("GetOrganizationInfo")]
+        public IActionResult GetOrganizationInfo(string organization)
+        {
+            try
+            {
+                var result = applicationService.GetOrganizationInfo(organization);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(errorRespond.GetErrorRespond(e));
+            }
+        }
+
         [HttpPost]
         [Route("InitRequest")]
         public IActionResult InitRequest([FromBody] KeyStrokeModel request)

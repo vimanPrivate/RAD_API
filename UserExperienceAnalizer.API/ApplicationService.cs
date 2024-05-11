@@ -63,5 +63,12 @@ namespace UserExperienceAnalizer.API
                 throw;
             }
         }
+
+        public CommonRespond<OrganizationInfoModel> GetOrganizationInfo(string organizationName)
+        {
+
+
+            return null;
+        }
     }
 }
