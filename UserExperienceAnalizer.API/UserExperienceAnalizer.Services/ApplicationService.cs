@@ -5,14 +5,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using UserExperienceAnalizer.API.Models;
 
-namespace UserExperienceAnalizer.API
+namespace UserExperienceAnalizer.API.UserExperienceAnalizer.Services
 {
     public class ApplicationService
     {
         private FirebaseClient firebase;
         public ApplicationService()
         {
-            this.firebase = new FirebaseClient();
+            firebase = new FirebaseClient();
         }
 
         public void CaptureKeyStorokes(KeyStrokeModel request)
