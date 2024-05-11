@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using UserExperienceAnalizer.API.Models;
 //using UserExperienceAnalizer.Common.Models;
 //using UserExperienceAnalizer.Common.Validation;
 //using UserExperienceAnalizer.Service.Services;
@@ -22,18 +23,42 @@ namespace UserExperienceAnalizer.API.Controllers
     {
         private readonly GlobalVar _globalVar;
         private ApplicationService applicationService;
+        private ErrorRespond errorRespond;
 
         public ApplicationController(GlobalVar globalVar)
         {
             this.applicationService = new ApplicationService();
             _globalVar = globalVar;
+            this.errorRespond = new ErrorRespond();
         }
-        
+
+        [HttpGet]
+        [Route("ReadVals")]
+        public IActionResult ReadVals()
+        {
+            applicationService.ReadVals();
+            return Ok();
+        }
+
+        [HttpGet]
+        [Route("GetOrganizations")]
+        public IActionResult GetOrganizations()
+        {
+            try
+            {
+                var result = applicationService.GetOrganizations();
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(errorRespond.GetErrorRespond(e));
+            }
+        }
+
         [HttpPost]
         [Route("InitRequest")]
         public IActionResult InitRequest([FromBody] KeyStrokeModel request)
         {
-
             try
             {
                 _globalVar.UserID = Guid.NewGuid();

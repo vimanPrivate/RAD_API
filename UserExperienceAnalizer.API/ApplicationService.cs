@@ -1,7 +1,9 @@
-﻿using System;
+﻿using FireSharp;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using UserExperienceAnalizer.API.Models;
 
 namespace UserExperienceAnalizer.API
 {
@@ -26,6 +28,59 @@ namespace UserExperienceAnalizer.API
 
             var client = firebase.InitFirebaseClient();
             var response = client.Push(request.OrganizationName + "/", request);
+        }
+
+        public void ReadVals()
+        {
+            var client = firebase.InitFirebaseClient();
+            var response = client.Get("/");
+
+            if (response.Body != "null")
+            {
+                var data = response.ResultAs<Dictionary<string, object>>();
+                foreach (var item in data)
+                {
+                    Console.WriteLine(item.Key + ": " + item.Value);
+                }
+            }
+            else
+            {
+                Console.WriteLine("No data found.");
+            }
+        }
+
+        public CommonRespond<OrganizationModel> GetOrganizations()
+        {
+            try
+            {
+                var client = firebase.InitFirebaseClient();
+                var response = client.Get("/");
+
+                if (response.Body != "null")
+                {
+                    var list = new List<string>();
+                    var data = response.ResultAs<Dictionary<string, object>>();
+
+                    var commonResponse = new CommonRespond<OrganizationModel>();
+
+                    commonResponse.Response = new Response();
+                    commonResponse.Response.Message = "Success!";
+                    commonResponse.Data = new OrganizationModel();
+
+                    foreach (var item in data)
+                        list.Add(item.Key);
+
+                    commonResponse.Data.OrganizationNames = list;
+
+                    return commonResponse;
+                }
+                else
+                    return null;
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
         }
     }
 }
