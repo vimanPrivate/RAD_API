@@ -30,25 +30,6 @@ namespace UserExperienceAnalizer.API
             var response = client.Push(request.OrganizationName + "/", request);
         }
 
-        public void ReadVals()
-        {
-            var client = firebase.InitFirebaseClient();
-            var response = client.Get("/");
-
-            if (response.Body != "null")
-            {
-                var data = response.ResultAs<Dictionary<string, object>>();
-                foreach (var item in data)
-                {
-                    Console.WriteLine(item.Key + ": " + item.Value);
-                }
-            }
-            else
-            {
-                Console.WriteLine("No data found.");
-            }
-        }
-
         public CommonRespond<OrganizationModel> GetOrganizations()
         {
             try

@@ -33,14 +33,6 @@ namespace UserExperienceAnalizer.API.Controllers
         }
 
         [HttpGet]
-        [Route("ReadVals")]
-        public IActionResult ReadVals()
-        {
-            applicationService.ReadVals();
-            return Ok();
-        }
-
-        [HttpGet]
         [Route("GetOrganizations")]
         public IActionResult GetOrganizations()
         {
