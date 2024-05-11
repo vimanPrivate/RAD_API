@@ -39,6 +39,7 @@ namespace UserExperienceAnalizer.API.Controllers
         {
             try
             {
+                // sample comment
                 var result = applicationService.GetOrganizations();
                 return Ok(result);
             }
