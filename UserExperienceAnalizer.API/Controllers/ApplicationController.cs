@@ -39,7 +39,6 @@ namespace UserExperienceAnalizer.API.Controllers
         {
             try
             {
-                // sample comment
                 var result = applicationService.GetOrganizations();
                 return Ok(result);
             }
@@ -56,7 +55,7 @@ namespace UserExperienceAnalizer.API.Controllers
             try
             {
                 var result = applicationService.GetOrganizationInfo(organization);
-                return Ok();
+                return Ok(result);
             }
             catch (Exception e)
             {

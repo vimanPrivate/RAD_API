@@ -10,9 +10,12 @@ namespace UserExperienceAnalizer.API.UserExperienceAnalizer.Services
     public class ApplicationService
     {
         private FirebaseClient firebase;
+        private OrganizationService organizationService;
+
         public ApplicationService()
         {
             firebase = new FirebaseClient();
+            organizationService = new OrganizationService();
         }
 
         public void CaptureKeyStorokes(KeyStrokeModel request)
@@ -66,9 +69,20 @@ namespace UserExperienceAnalizer.API.UserExperienceAnalizer.Services
 
         public CommonRespond<OrganizationInfoModel> GetOrganizationInfo(string organizationName)
         {
+            var model = new CommonRespond<OrganizationInfoModel>();
+            
+            model.Response = new Response();
+            model.Response.Message = "Success!";
+
+            model.Data  = new OrganizationInfoModel();
+
+            model.Data.FinalGoals = new FinalGoals();
+            model.Data.FinalGoals = organizationService.GetFinalGoals(organizationName);
+
+            model.Data.General = new GeneralInfo();
 
 
-            return null;
+            return model;
         }
     }
 }
