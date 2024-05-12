@@ -96,10 +96,10 @@ namespace UserExperienceAnalizer.API.UserExperienceAnalizer.Services
             model.Data = new OrganizationInfoModel();
 
             model.Data.FinalGoals = new FinalGoals();
-            model.Data.FinalGoals = organizationService.GetFinalGoals(organizationName);
+            model.Data.FinalGoals = organizationService.GetFinalGoals();
 
             model.Data.General = new GeneralInfo();
-            model.Data.General = organizationService.GetGeneralInfo(organizationName);
+            model.Data.General = organizationService.GetGeneralInfo();
 
 
             return model;

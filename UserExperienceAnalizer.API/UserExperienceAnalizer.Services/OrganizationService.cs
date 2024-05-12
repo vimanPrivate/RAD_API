@@ -40,7 +40,7 @@ namespace UserExperienceAnalizer.API.UserExperienceAnalizer.Services
             }
         }
 
-        public FinalGoals GetFinalGoals(string organizationName)
+        public FinalGoals GetFinalGoals()
         {
             try
             {
@@ -50,7 +50,11 @@ namespace UserExperienceAnalizer.API.UserExperienceAnalizer.Services
                 foreach (var item in organizationData)
                 {
                     if (item.Value.IsFinalGoal)
-                        finalGoal.GoalName.Add(item.Value.ScreenName);
+                    {
+                        if(!finalGoal.GoalName.Contains(item.Value.ScreenName))
+                            finalGoal.GoalName.Add(item.Value.ScreenName);
+                    }
+                       
                 }
 
                 return finalGoal;
@@ -61,17 +65,17 @@ namespace UserExperienceAnalizer.API.UserExperienceAnalizer.Services
             }
         }
 
-        public GeneralInfo GetGeneralInfo(string organizationName)
+        public GeneralInfo GetGeneralInfo()
         {
             var model = new GeneralInfo();
 
-            model.TodayApplicationUsageCount = GetTodayLoggedInCount(organizationName);
+            model.TodayApplicationUsageCount = GetTodayLoggedInCount();
            
 
             return model;
         }
 
-        private int GetTodayLoggedInCount(string organizationName)
+        private int GetTodayLoggedInCount()
         {
             int count = 0;
 
