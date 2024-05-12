@@ -71,7 +71,6 @@ namespace UserExperienceAnalizer.API.UserExperienceAnalizer.Services
 
             model.TodayApplicationUsageCount = GetTodayLoggedInCount();
            
-
             return model;
         }
 
@@ -87,6 +86,47 @@ namespace UserExperienceAnalizer.API.UserExperienceAnalizer.Services
             }
 
             return count;
+        }
+
+        public GraphInfo GetGraphInfo()
+        {
+            var model = new GraphInfo();
+            model.DailyAppUsage = new DailyAppUsageGraph();
+            model.DailyAppUsage = GetDailyAppUsageGraph();
+
+            return model;
+        }
+
+        private DailyAppUsageGraph GetDailyAppUsageGraph() 
+        {
+            var model = new DailyAppUsageGraph();
+            model.Cordinates = new List<GraphCordinates>();
+
+            var dateList = new List<string>();
+
+            for(int x = 0; x <= 6; x++)
+                dateList.Add(DateTime.Now.AddDays(-x).ToString("yyyy-MM-dd"));
+
+            foreach(string date in dateList)
+            {
+                int yCordinatesVal = 0;
+                var cordinates = new GraphCordinates();
+
+                foreach (var item in organizationData)
+                {
+                    string createdDate = Convert.ToDateTime(item.Value.CreatedDateTime).ToString("yyyy-MM-dd");
+                   
+                    if(createdDate == date && item.Value.ScreenName == "Init")
+                        yCordinatesVal++;
+                }
+
+                cordinates.x_Cordinates = date;
+                cordinates.y_Cordinates = yCordinatesVal;
+
+                model.Cordinates.Add(cordinates);
+            }
+            
+            return model;
         }
     }
 }

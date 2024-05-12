@@ -101,6 +101,11 @@ namespace UserExperienceAnalizer.API.UserExperienceAnalizer.Services
             model.Data.General = new GeneralInfo();
             model.Data.General = organizationService.GetGeneralInfo();
 
+            var graphData = organizationService.GetGraphInfo();
+            model.Data.Graph = new GraphInfo();
+            model.Data.Graph.DailyAppUsage = new DailyAppUsageGraph();
+            model.Data.Graph.DailyAppUsage = graphData.DailyAppUsage;
+
 
             return model;
         }

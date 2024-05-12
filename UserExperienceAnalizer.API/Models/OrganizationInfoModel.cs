@@ -6,6 +6,7 @@ namespace UserExperienceAnalizer.API.Models
     {
         public GeneralInfo General { get; set; }
         public FinalGoals FinalGoals { get; set; }
+        public GraphInfo Graph { get; set; }
     }
 
     public class FinalGoals
@@ -16,5 +17,21 @@ namespace UserExperienceAnalizer.API.Models
     public class GeneralInfo
     {
         public int TodayApplicationUsageCount { get; set; }
+    }
+
+    public class GraphInfo
+    {
+        public DailyAppUsageGraph DailyAppUsage { get; set; }
+    }
+
+    public class DailyAppUsageGraph
+    {
+        public List<GraphCordinates> Cordinates { get; set; }
+    }
+
+    public class GraphCordinates
+    {
+        public string x_Cordinates { get; set; }
+        public int y_Cordinates { get; set; }
     }
 }

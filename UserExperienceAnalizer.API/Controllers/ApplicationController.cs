@@ -10,10 +10,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using UserExperienceAnalizer.API.Models;
 using UserExperienceAnalizer.API.UserExperienceAnalizer.Services;
-//using UserExperienceAnalizer.Common.Models;
-//using UserExperienceAnalizer.Common.Validation;
-//using UserExperienceAnalizer.Service.Services;
-//using UserExperienceAnalizer.Common.Validation;
 
 namespace UserExperienceAnalizer.API.Controllers
 {
