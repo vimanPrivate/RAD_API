@@ -10,12 +10,28 @@ namespace UserExperienceAnalizer.API.UserExperienceAnalizer.Services
     public class ApplicationService
     {
         private FirebaseClient firebase;
-        private OrganizationService organizationService;
 
         public ApplicationService()
         {
             firebase = new FirebaseClient();
-            organizationService = new OrganizationService();
+        }
+
+        public bool InitRequest(string organizationName, Guid id)
+        {
+            var model = new KeyStrokeModel();
+
+            model.Id = id;
+            model.ScreenName = "Init";
+            model.CreatedDateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            model.OrganizationName = organizationName;
+
+            var client = firebase.InitFirebaseClient();
+            var response = client.Push(organizationName + "/", model);
+
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                return true;
+
+            return false;
         }
 
         public void CaptureKeyStorokes(KeyStrokeModel request)
@@ -69,17 +85,21 @@ namespace UserExperienceAnalizer.API.UserExperienceAnalizer.Services
 
         public CommonRespond<OrganizationInfoModel> GetOrganizationInfo(string organizationName)
         {
+            OrganizationService organizationService = new OrganizationService(organizationName);
+
+
             var model = new CommonRespond<OrganizationInfoModel>();
-            
+
             model.Response = new Response();
             model.Response.Message = "Success!";
 
-            model.Data  = new OrganizationInfoModel();
+            model.Data = new OrganizationInfoModel();
 
             model.Data.FinalGoals = new FinalGoals();
             model.Data.FinalGoals = organizationService.GetFinalGoals(organizationName);
 
             model.Data.General = new GeneralInfo();
+            model.Data.General = organizationService.GetGeneralInfo(organizationName);
 
 
             return model;

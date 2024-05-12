@@ -74,10 +74,22 @@ namespace UserExperienceAnalizer.API.Controllers
                 InputValidation.ValidateOraganization(request.OrganizationName, "OrganizationName Cannot be empty");
                 _globalVar.Organization = request.OrganizationName;
 
-                return Ok(new
+                var result = applicationService.InitRequest(_globalVar.Organization, _globalVar.UserID);
+                if (result)
                 {
-                    Message = "Success"
-                });
+                    return Ok(new
+                    {
+                        Message = "Success"
+                    });
+                }
+                else
+                {
+                    return BadRequest(new
+                    {
+                        Message = "Coudnt connect to the Database. Please contact Admin"
+                    });
+                }
+                
             }
             catch (Exception e)
             {

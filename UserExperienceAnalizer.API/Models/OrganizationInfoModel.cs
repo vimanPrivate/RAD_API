@@ -15,6 +15,6 @@ namespace UserExperienceAnalizer.API.Models
 
     public class GeneralInfo
     {
-        public int ApplicationUsageCount { get; set; }
+        public int TodayApplicationUsageCount { get; set; }
     }
 }
