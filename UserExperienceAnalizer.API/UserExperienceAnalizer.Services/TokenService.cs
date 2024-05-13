@@ -19,8 +19,8 @@ namespace UserExperienceAnalizer.API.UserExperienceAnalizer.Services
 
             var claims = new[]
             {
-                    new Claim(ClaimTypes.Name, "RAD API"),
-                    new Claim(ClaimTypes.Email, "viman.satharasinghe@gmail.com"),
+                 new Claim(ClaimTypes.Name, "RAD API"),
+                 new Claim(ClaimTypes.Email, "viman.satharasinghe@gmail.com"),
             };
 
             var token = new JwtSecurityToken(
