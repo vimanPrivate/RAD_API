@@ -9,6 +9,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using UserExperienceAnalizer.API.Models;
+using UserExperienceAnalizer.API.UserExperienceAnalizer.Common;
 using UserExperienceAnalizer.API.UserExperienceAnalizer.Services;
 
 namespace UserExperienceAnalizer.API.Controllers
@@ -65,6 +66,8 @@ namespace UserExperienceAnalizer.API.Controllers
         {
             try
             {
+                
+
                 _globalVar.UserID = Guid.NewGuid();
 
                 InputValidation.ValidateOraganization(request.OrganizationName, "OrganizationName Cannot be empty");

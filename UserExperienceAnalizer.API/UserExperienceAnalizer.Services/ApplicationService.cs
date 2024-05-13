@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UserExperienceAnalizer.API.Models;
+using UserExperienceAnalizer.API.UserExperienceAnalizer.Common;
 
 namespace UserExperienceAnalizer.API.UserExperienceAnalizer.Services
 {
@@ -29,7 +30,10 @@ namespace UserExperienceAnalizer.API.UserExperienceAnalizer.Services
             var response = client.Push(organizationName + "/", model);
 
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                Logs.InfoLog("Session Started!\nID : "+model.Id+"\nOrganization : "+model.OrganizationName);
                 return true;
+            }             
 
             return false;
         }
@@ -47,6 +51,8 @@ namespace UserExperienceAnalizer.API.UserExperienceAnalizer.Services
 
             var client = firebase.InitFirebaseClient();
             var response = client.Push(request.OrganizationName + "/", request);
+
+            Logs.InfoLog("Key Stroke captured\nID : "+request.Id+"\nScreenName : "+request.ScreenName);
         }
 
         public CommonRespond<OrganizationModel> GetOrganizations()
