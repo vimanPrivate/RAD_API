@@ -19,13 +19,13 @@ namespace UserExperienceAnalizer.API.UserExperienceAnalizer.Services
 
             var claims = new[]
             {
-                    new Claim(ClaimTypes.Name, "John Doe"),
-                    new Claim(ClaimTypes.Email, "john.doe@example.com"),
+                    new Claim(ClaimTypes.Name, "RAD API"),
+                    new Claim(ClaimTypes.Email, "viman.satharasinghe@gmail.com"),
             };
 
             var token = new JwtSecurityToken(
-                issuer: "your_issuer",
-                audience: "your_audience",
+                issuer: "RADHOST",
+                audience: "USER",
                 expires: DateTime.UtcNow.AddHours(1),
                 signingCredentials: signingCredentials,
                 claims: claims
