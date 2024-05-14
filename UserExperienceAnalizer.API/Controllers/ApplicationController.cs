@@ -3,12 +3,17 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 using UserExperienceAnalizer.API.Models;
+using UserExperienceAnalizer.API.UserExperienceAnalizer.Common;
 using UserExperienceAnalizer.API.UserExperienceAnalizer.Services;
 
 namespace UserExperienceAnalizer.API.Controllers
@@ -21,12 +26,14 @@ namespace UserExperienceAnalizer.API.Controllers
         private readonly GlobalVar _globalVar;
         private ApplicationService applicationService;
         private ErrorRespond errorRespond;
+        private TokenService token;
 
         public ApplicationController(GlobalVar globalVar)
         {
             this.applicationService = new ApplicationService();
             _globalVar = globalVar;
             this.errorRespond = new ErrorRespond();
+            this.token = new TokenService();
         }
 
         [HttpGet]
@@ -70,12 +77,13 @@ namespace UserExperienceAnalizer.API.Controllers
                 InputValidation.ValidateOraganization(request.OrganizationName, "OrganizationName Cannot be empty");
                 _globalVar.Organization = request.OrganizationName;
 
-                var result = applicationService.InitRequest(_globalVar.Organization, _globalVar.UserID);
+                bool result = applicationService.InitRequest(_globalVar.Organization, _globalVar.UserID);
                 if (result)
                 {
                     return Ok(new
                     {
-                        Message = "Success"
+                        Message = "Success",
+                        Token = token.GetToken()
                     });
                 }
                 else
@@ -85,7 +93,7 @@ namespace UserExperienceAnalizer.API.Controllers
                         Message = "Coudnt connect to the Database. Please contact Admin"
                     });
                 }
-                
+
             }
             catch (Exception e)
             {
@@ -113,7 +121,7 @@ namespace UserExperienceAnalizer.API.Controllers
 
                 return Ok(msg);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 var msg = new
                 {
