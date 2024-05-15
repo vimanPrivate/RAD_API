@@ -120,5 +120,13 @@ namespace UserExperienceAnalizer.API.UserExperienceAnalizer.Services
 
             return model;
         }
+
+        public Dictionary<string, KeyStrokeModel> GetRawData(string org)
+        {
+            OrganizationService organizationService = new OrganizationService(org);
+            var res = organizationService.GetOrganizationInfo(org);
+
+            return res;
+        }
     }
 }

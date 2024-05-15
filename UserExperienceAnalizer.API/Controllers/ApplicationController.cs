@@ -66,6 +66,21 @@ namespace UserExperienceAnalizer.API.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("GetRawData")]
+        public IActionResult GetRawData(string organization)
+        {
+            try
+            {
+                var result = applicationService.GetRawData(organization);
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(errorRespond.GetErrorRespond(e));
+            }
+        }
+
         [HttpPost]
         [Route("InitRequest")]
         public IActionResult InitRequest([FromBody] KeyStrokeModel request)

@@ -32,8 +32,6 @@ namespace UserExperienceAnalizer.API.UserExperienceAnalizer.Services
             //TimeSpan t4 = DivideTimeSpan(t3, 3);
         }
 
-
-
         public Dictionary<string, KeyStrokeModel> GetOrganizationInfo(string organization)
         {
             try
@@ -171,18 +169,18 @@ namespace UserExperienceAnalizer.API.UserExperienceAnalizer.Services
 
             var finalGoalList = GetFinalGoals().GoalName;
 
-            foreach(var goal in finalGoalList)
+            foreach (var goal in finalGoalList)
             {
                 TimeSpan totalTimeForGoal = new TimeSpan(0, 0, 0);
                 int goalCount = 0;
 
-                foreach(var itm in list)
+                foreach (var itm in list)
                 {
                     var key = itm.Key;
                     var value = itm.Value;
 
                     string dGoal = "";
-                    TimeSpan dTimeSpan = new TimeSpan(0,0,0);
+                    TimeSpan dTimeSpan = new TimeSpan(0, 0, 0);
 
                     var enumerator = value.GetEnumerator();
                     while (enumerator.MoveNext())
@@ -192,7 +190,7 @@ namespace UserExperienceAnalizer.API.UserExperienceAnalizer.Services
                         dTimeSpan = kvp.Value;
                     }
 
-                    if(goal == dGoal)
+                    if (goal == dGoal)
                     {
                         totalTimeForGoal = totalTimeForGoal + dTimeSpan;
                         goalCount++;
@@ -204,7 +202,7 @@ namespace UserExperienceAnalizer.API.UserExperienceAnalizer.Services
                     GoalName = goal,
                     TotalTimeToTarget = totalTimeForGoal,
                     AverageTimeToTarget = DivideTimeSpan(totalTimeForGoal, goalCount)
-                }) ;
+                });
             }
 
             return result;
@@ -270,6 +268,26 @@ namespace UserExperienceAnalizer.API.UserExperienceAnalizer.Services
             }
 
             return mainDictionary;
+        }
+
+        public void GetDailyGoalHitCount()
+        {
+
+        }
+
+        private void CaptureDailiGoalHist()
+        {
+            var dateList = new List<string>();
+
+            for (int x = 0; x <= 6; x++)
+                dateList.Add(DateTime.Now.AddDays(-x).ToString("yyyy-MM-dd"));
+
+            var finalGoalList = GetFinalGoals().GoalName;
+
+            foreach (var date in dateList)
+            {
+                
+            }
         }
     }
 }
