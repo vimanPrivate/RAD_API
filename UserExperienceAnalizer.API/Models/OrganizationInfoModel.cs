@@ -30,6 +30,19 @@ namespace UserExperienceAnalizer.API.Models
     public class GraphInfo
     {
         public DailyAppUsageGraph DailyAppUsage { get; set; }
+        public DailyGoalHitList DailyGoalHitList { get; set; }
+    }
+
+    public class DailyGoalHitList
+    {
+        public List<DailyGoalHit> DailyGoalHits { get; set; }
+    }
+
+    public class DailyGoalHit
+    {
+        public string GoalName { get; set; }
+        public List<GraphCordinates> Cordinates { get; set; }
+
     }
 
     public class DailyAppUsageGraph

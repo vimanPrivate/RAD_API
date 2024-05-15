@@ -4,6 +4,7 @@ using UserExperienceAnalizer.API.Models;
 using System.Data;
 using Newtonsoft.Json;
 using System.Collections;
+using System.Linq;
 
 namespace UserExperienceAnalizer.API.UserExperienceAnalizer.Services
 {
@@ -272,10 +273,10 @@ namespace UserExperienceAnalizer.API.UserExperienceAnalizer.Services
 
         public void GetDailyGoalHitCount()
         {
-
+            CaptureDailiGoalHist();
         }
 
-        private void CaptureDailiGoalHist()
+        public void CaptureDailiGoalHist()
         {
             var dateList = new List<string>();
 
@@ -283,10 +284,30 @@ namespace UserExperienceAnalizer.API.UserExperienceAnalizer.Services
                 dateList.Add(DateTime.Now.AddDays(-x).ToString("yyyy-MM-dd"));
 
             var finalGoalList = GetFinalGoals().GoalName;
+            var hitCountViewModel = new List<HitCountViewModel>();
 
+            foreach(var goal in finalGoalList)
+            {
+                hitCountViewModel.Add(new HitCountViewModel { GoalName = goal});
+            }
+            
             foreach (var date in dateList)
             {
-                
+                foreach(var item in organizationData)
+                {
+                    var val = item.Value;
+                    string createdDate = Convert.ToDateTime(item.Value.CreatedDateTime).ToString("yyyy-MM-dd");
+
+                    if(date == createdDate)
+                    {
+                        if (val.IsFinalGoal)
+                        {
+                            var model = hitCountViewModel.Where(x => x.GoalName == val.ScreenName).FirstOrDefault();
+                            model.HitCount = model.HitCount + 1;
+                        }
+                    }
+                }
+
             }
         }
     }
