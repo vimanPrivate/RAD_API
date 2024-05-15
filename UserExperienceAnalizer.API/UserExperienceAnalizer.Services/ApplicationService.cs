@@ -104,6 +104,9 @@ namespace UserExperienceAnalizer.API.UserExperienceAnalizer.Services
             model.Data.FinalGoals = new FinalGoals();
             model.Data.FinalGoals = organizationService.GetFinalGoals();
 
+            model.Data.FinalGoals.GoalReachingTime = new List<FinalGoalAverageTime>();
+            model.Data.FinalGoals.GoalReachingTime = organizationService.GetAverageTimeToFinalGoal();
+
             model.Data.General = new GeneralInfo();
             model.Data.General = organizationService.GetGeneralInfo();
 
@@ -112,7 +115,7 @@ namespace UserExperienceAnalizer.API.UserExperienceAnalizer.Services
             model.Data.Graph.DailyAppUsage = new DailyAppUsageGraph();
             model.Data.Graph.DailyAppUsage = graphData.DailyAppUsage;
 
-            organizationService.test();
+            //organizationService.test();
 
 
             return model;

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace UserExperienceAnalizer.API.Models
 {
@@ -12,11 +13,18 @@ namespace UserExperienceAnalizer.API.Models
     public class FinalGoals
     {
         public List<string> GoalName { get; set; }
+        public List<FinalGoalAverageTime> GoalReachingTime { get; set; }
     }
 
     public class GeneralInfo
     {
         public int TodayApplicationUsageCount { get; set; }
+    }
+
+    public class FinalGoalAverageTime
+    {
+        public string GoalName { get; set; }
+        public double AverageTimeToReach { get; set; }
     }
 
     public class GraphInfo

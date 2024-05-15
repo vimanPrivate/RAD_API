@@ -28,7 +28,11 @@ namespace UserExperienceAnalizer.API.UserExperienceAnalizer.Services
 
             TimeSpan ss;
             TimeSpan t3 = timeDifference + t2;
+
+            //TimeSpan t4 = DivideTimeSpan(t3, 3);
         }
+
+
 
         public Dictionary<string, KeyStrokeModel> GetOrganizationInfo(string organization)
         {
@@ -140,11 +144,80 @@ namespace UserExperienceAnalizer.API.UserExperienceAnalizer.Services
             return model;
         }
 
-        public void test()
+        public List<FinalGoalAverageTime> GetAverageTimeToFinalGoal()
         {
+            var list = new List<FinalGoalAverageTime>();
+
             var timeTaskDictionary = GetAverageTimeToGoal();
+            var result = GetAverageTimeToGoal(timeTaskDictionary);
 
+            foreach (var itm in result)
+            {
+                var model = new FinalGoalAverageTime();
 
+                model.GoalName = itm.GoalName;
+                model.AverageTimeToReach = itm.AverageTimeToTarget.TotalSeconds;
+
+                list.Add(model);
+            }
+
+            return list;
+        }
+
+        private List<GoalViewModel> GetAverageTimeToGoal(Dictionary<Guid, Dictionary<string, TimeSpan>> list)
+        {
+            // var result = new Dictionary<string, TimeSpan>();
+            var result = new List<GoalViewModel>();
+
+            var finalGoalList = GetFinalGoals().GoalName;
+
+            foreach(var goal in finalGoalList)
+            {
+                TimeSpan totalTimeForGoal = new TimeSpan(0, 0, 0);
+                int goalCount = 0;
+
+                foreach(var itm in list)
+                {
+                    var key = itm.Key;
+                    var value = itm.Value;
+
+                    string dGoal = "";
+                    TimeSpan dTimeSpan = new TimeSpan(0,0,0);
+
+                    var enumerator = value.GetEnumerator();
+                    while (enumerator.MoveNext())
+                    {
+                        var kvp = enumerator.Current;
+                        dGoal = kvp.Key;
+                        dTimeSpan = kvp.Value;
+                    }
+
+                    if(goal == dGoal)
+                    {
+                        totalTimeForGoal = totalTimeForGoal + dTimeSpan;
+                        goalCount++;
+                    }
+                }
+
+                result.Add(new GoalViewModel
+                {
+                    GoalName = goal,
+                    TotalTimeToTarget = totalTimeForGoal,
+                    AverageTimeToTarget = DivideTimeSpan(totalTimeForGoal, goalCount)
+                }) ;
+            }
+
+            return result;
+        }
+
+        private static TimeSpan DivideTimeSpan(TimeSpan timeSpan, int divisor)
+        {
+            // Convert TimeSpan to ticks, divide by the divisor, and convert back to TimeSpan
+            if (divisor == 0)
+                return new TimeSpan(0, 0, 0);
+
+            long ticks = timeSpan.Ticks / divisor;
+            return TimeSpan.FromTicks(ticks);
         }
 
         private Dictionary<Guid, Dictionary<string, TimeSpan>> GetAverageTimeToGoal()
@@ -160,21 +233,6 @@ namespace UserExperienceAnalizer.API.UserExperienceAnalizer.Services
                 if (!uniqueIdList.Contains(id))
                     uniqueIdList.Add(id);
             }
-
-            //// Getting user access Final golas
-
-            //var userAccessedFinalGoals = new Dictionary<Guid,string>();
-            //foreach (var id in uniqueIdList)
-            //{
-            //    foreach (var item in organizationData)
-            //    {
-            //        if (id == item.Value.Id)
-            //        {
-            //            if (item.Value.IsFinalGoal)
-            //                userAccessedFinalGoals.Add(id,item.Value.ScreenName);
-            //        }
-            //    }
-            //}
 
             // Calculating Each time for Final goals
             var mainDictionary = new Dictionary<Guid, Dictionary<string, TimeSpan>>();
@@ -198,7 +256,6 @@ namespace UserExperienceAnalizer.API.UserExperienceAnalizer.Services
 
                             if (!item.Value.IsFinalGoal)
                                 goal = item.Value.ScreenName;
-
                         }
                         catch (Exception)
                         {
@@ -213,7 +270,6 @@ namespace UserExperienceAnalizer.API.UserExperienceAnalizer.Services
             }
 
             return mainDictionary;
-
         }
     }
 }
