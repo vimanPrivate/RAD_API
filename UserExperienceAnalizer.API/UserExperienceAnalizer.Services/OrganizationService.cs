@@ -24,6 +24,10 @@ namespace UserExperienceAnalizer.API.UserExperienceAnalizer.Services
             var d2 = Convert.ToDateTime("2024-05-10 19:10:45");
 
             TimeSpan timeDifference = d2 - d;
+            TimeSpan t2 = d2 - d;
+
+            TimeSpan ss;
+            TimeSpan t3 = timeDifference + t2;
         }
 
         public Dictionary<string, KeyStrokeModel> GetOrganizationInfo(string organization)
@@ -59,9 +63,9 @@ namespace UserExperienceAnalizer.API.UserExperienceAnalizer.Services
                 {
                     if (item.Value.IsFinalGoal)
                     {
-                        if(!finalGoal.GoalName.Contains(item.Value.ScreenName))
+                        if (!finalGoal.GoalName.Contains(item.Value.ScreenName))
                             finalGoal.GoalName.Add(item.Value.ScreenName);
-                    }                     
+                    }
                 }
 
                 return finalGoal;
@@ -77,7 +81,7 @@ namespace UserExperienceAnalizer.API.UserExperienceAnalizer.Services
             var model = new GeneralInfo();
 
             model.TodayApplicationUsageCount = GetTodayLoggedInCount();
-           
+
             return model;
         }
 
@@ -85,9 +89,9 @@ namespace UserExperienceAnalizer.API.UserExperienceAnalizer.Services
         {
             int count = 0;
 
-            foreach(var item in organizationData)
+            foreach (var item in organizationData)
             {
-                if(Convert.ToDateTime(item.Value.CreatedDateTime).ToString("yyyy-MM-dd") == DateTime.Now.ToString("yyyy-MM-dd") 
+                if (Convert.ToDateTime(item.Value.CreatedDateTime).ToString("yyyy-MM-dd") == DateTime.Now.ToString("yyyy-MM-dd")
                     && item.Value.ScreenName == "Init")
                     count++;
             }
@@ -104,17 +108,17 @@ namespace UserExperienceAnalizer.API.UserExperienceAnalizer.Services
             return model;
         }
 
-        private DailyAppUsageGraph GetDailyAppUsageGraph() 
+        private DailyAppUsageGraph GetDailyAppUsageGraph()
         {
             var model = new DailyAppUsageGraph();
             model.Cordinates = new List<GraphCordinates>();
 
             var dateList = new List<string>();
 
-            for(int x = 0; x <= 6; x++)
+            for (int x = 0; x <= 6; x++)
                 dateList.Add(DateTime.Now.AddDays(-x).ToString("yyyy-MM-dd"));
 
-            foreach(string date in dateList)
+            foreach (string date in dateList)
             {
                 int yCordinatesVal = 0;
                 var cordinates = new GraphCordinates();
@@ -122,8 +126,8 @@ namespace UserExperienceAnalizer.API.UserExperienceAnalizer.Services
                 foreach (var item in organizationData)
                 {
                     string createdDate = Convert.ToDateTime(item.Value.CreatedDateTime).ToString("yyyy-MM-dd");
-                   
-                    if(createdDate == date && item.Value.ScreenName == "Init")
+
+                    if (createdDate == date && item.Value.ScreenName == "Init")
                         yCordinatesVal++;
                 }
 
@@ -132,37 +136,84 @@ namespace UserExperienceAnalizer.API.UserExperienceAnalizer.Services
 
                 model.Cordinates.Add(cordinates);
             }
-            
+
             return model;
         }
 
-        public void GetAverageTimeToTaskGraphData()
+        public void test()
+        {
+            var timeTaskDictionary = GetAverageTimeToGoal();
+
+
+        }
+
+        private Dictionary<Guid, Dictionary<string, TimeSpan>> GetAverageTimeToGoal()
         {
             var finalGoalList = GetFinalGoals();
             var uniqueIdList = new List<Guid>();
 
-            foreach(var item in organizationData)
+            // Filtering UserIDs
+
+            foreach (var item in organizationData)
             {
                 Guid id = item.Value.Id;
-                if(!uniqueIdList.Contains(id))
+                if (!uniqueIdList.Contains(id))
                     uniqueIdList.Add(id);
             }
 
-            
+            //// Getting user access Final golas
 
-            foreach(var id in uniqueIdList)
+            //var userAccessedFinalGoals = new Dictionary<Guid,string>();
+            //foreach (var id in uniqueIdList)
+            //{
+            //    foreach (var item in organizationData)
+            //    {
+            //        if (id == item.Value.Id)
+            //        {
+            //            if (item.Value.IsFinalGoal)
+            //                userAccessedFinalGoals.Add(id,item.Value.ScreenName);
+            //        }
+            //    }
+            //}
+
+            // Calculating Each time for Final goals
+            var mainDictionary = new Dictionary<Guid, Dictionary<string, TimeSpan>>();
+
+            foreach (var id in uniqueIdList)
             {
-                foreach(var item in organizationData)
+                TimeSpan totalTimeForGoal = new TimeSpan(0, 0, 0, 0);
+                var timeForEachGoal = new Dictionary<string, TimeSpan>();
+                string goal = null;
+
+                foreach (var item in organizationData)
                 {
-                    if(id == item.Value.Id)
+                    if (id == item.Value.Id)
                     {
-                        if (!item.Value.IsFinalGoal)
+                        try
                         {
-                            // calculate the time 
+                            DateTime dStart = Convert.ToDateTime(item.Value.StartDate + " " + item.Value.StartTime);
+                            DateTime dEnd = Convert.ToDateTime(item.Value.EndDate + " " + item.Value.EndTime);
+                            TimeSpan tmpTimeSpan = dEnd - dStart;
+                            totalTimeForGoal = totalTimeForGoal + tmpTimeSpan;
+
+                            if (!item.Value.IsFinalGoal)
+                                goal = item.Value.ScreenName;
+
+                        }
+                        catch (Exception)
+                        {
+                            continue;
                         }
                     }
                 }
+
+                timeForEachGoal.Add(String.IsNullOrEmpty(goal) ? finalGoalList.GoalName[0] : goal, totalTimeForGoal);
+
+                mainDictionary.Add(id, timeForEachGoal);
             }
+
+            return mainDictionary;
+
         }
     }
 }

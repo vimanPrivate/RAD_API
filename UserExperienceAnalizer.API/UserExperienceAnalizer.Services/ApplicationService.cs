@@ -112,6 +112,8 @@ namespace UserExperienceAnalizer.API.UserExperienceAnalizer.Services
             model.Data.Graph.DailyAppUsage = new DailyAppUsageGraph();
             model.Data.Graph.DailyAppUsage = graphData.DailyAppUsage;
 
+            organizationService.test();
+
 
             return model;
         }
