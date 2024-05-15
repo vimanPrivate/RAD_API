@@ -2,6 +2,8 @@
 using System;
 using UserExperienceAnalizer.API.Models;
 using System.Data;
+using Newtonsoft.Json;
+using System.Collections;
 
 namespace UserExperienceAnalizer.API.UserExperienceAnalizer.Services
 {
@@ -16,6 +18,12 @@ namespace UserExperienceAnalizer.API.UserExperienceAnalizer.Services
             organizationData = new Dictionary<string, KeyStrokeModel>();
 
             organizationData = GetOrganizationInfo(organizationName);
+            //string json = JsonConvert.SerializeObject(organizationData);
+
+            var d = Convert.ToDateTime("2024-05-10 19:10:27");
+            var d2 = Convert.ToDateTime("2024-05-10 19:10:45");
+
+            TimeSpan timeDifference = d2 - d;
         }
 
         public Dictionary<string, KeyStrokeModel> GetOrganizationInfo(string organization)
@@ -53,8 +61,7 @@ namespace UserExperienceAnalizer.API.UserExperienceAnalizer.Services
                     {
                         if(!finalGoal.GoalName.Contains(item.Value.ScreenName))
                             finalGoal.GoalName.Add(item.Value.ScreenName);
-                    }
-                       
+                    }                     
                 }
 
                 return finalGoal;
@@ -127,6 +134,35 @@ namespace UserExperienceAnalizer.API.UserExperienceAnalizer.Services
             }
             
             return model;
+        }
+
+        public void GetAverageTimeToTaskGraphData()
+        {
+            var finalGoalList = GetFinalGoals();
+            var uniqueIdList = new List<Guid>();
+
+            foreach(var item in organizationData)
+            {
+                Guid id = item.Value.Id;
+                if(!uniqueIdList.Contains(id))
+                    uniqueIdList.Add(id);
+            }
+
+            
+
+            foreach(var id in uniqueIdList)
+            {
+                foreach(var item in organizationData)
+                {
+                    if(id == item.Value.Id)
+                    {
+                        if (!item.Value.IsFinalGoal)
+                        {
+                            // calculate the time 
+                        }
+                    }
+                }
+            }
         }
     }
 }
