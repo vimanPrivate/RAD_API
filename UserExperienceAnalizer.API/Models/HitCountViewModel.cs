@@ -10,4 +10,10 @@ namespace UserExperienceAnalizer.API.Models
         public string GoalName { get; set; }
         public int HitCount { get; set; }
     }
+
+    public class HitCountMainViewModel
+    {
+        public string Date { get; set; }
+        public List<HitCountViewModel> HitCountList { get; set; }
+    }
 }

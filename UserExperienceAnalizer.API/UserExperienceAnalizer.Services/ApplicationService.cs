@@ -114,6 +114,9 @@ namespace UserExperienceAnalizer.API.UserExperienceAnalizer.Services
             model.Data.Graph = new GraphInfo();
             model.Data.Graph.DailyAppUsage = new DailyAppUsageGraph();
             model.Data.Graph.DailyAppUsage = graphData.DailyAppUsage;
+            model.Data.Graph.DailyGoalHitList = new DailyGoalHitList();
+            model.Data.Graph.DailyGoalHitList.DailyGoalHits = new List<DailyGoalHit>();
+            model.Data.Graph.DailyGoalHitList.DailyGoalHits = organizationService.GetDailyGoalHitCount();
 
             organizationService.GetDailyGoalHitCount();
 

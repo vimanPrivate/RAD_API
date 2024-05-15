@@ -271,29 +271,72 @@ namespace UserExperienceAnalizer.API.UserExperienceAnalizer.Services
             return mainDictionary;
         }
 
-        public void GetDailyGoalHitCount()
+        public List<DailyGoalHit> GetDailyGoalHitCount()
         {
-            CaptureDailiGoalHist();
+            var result = CaptureDailiGoalHist();
+            var mappedResult = MapGoalHitsData(result);
+
+            return mappedResult;
         }
 
-        public void CaptureDailiGoalHist()
+        private List<DailyGoalHit> MapGoalHitsData(List<HitCountMainViewModel> list)
+        {
+            var dailyGoalHitList = new List<DailyGoalHit>();
+            var finalGoalList = GetFinalGoals().GoalName;
+
+            foreach(var goal in finalGoalList)
+            {
+                var cordinatesList = new List<GraphCordinates>();
+
+                foreach (var itm in list)
+                {
+                    string date = itm.Date;
+                    int hitCount = itm.HitCountList.Where(x => x.GoalName == goal).Select(x => x.HitCount).FirstOrDefault();
+
+                    var cordinates = new GraphCordinates();
+                    cordinates.x_Cordinates = date;
+                    cordinates.y_Cordinates = hitCount;
+
+                    cordinatesList.Add(cordinates);
+                }
+
+                var model = new DailyGoalHit();
+                model.GoalName = goal;
+
+                model.Cordinates = new List<GraphCordinates>();
+                model.Cordinates = cordinatesList;
+
+                dailyGoalHitList.Add(model);
+
+            }
+
+           return dailyGoalHitList;
+        }
+
+        private List<HitCountMainViewModel> CaptureDailiGoalHist()
         {
             var dateList = new List<string>();
 
             for (int x = 0; x <= 6; x++)
                 dateList.Add(DateTime.Now.AddDays(-x).ToString("yyyy-MM-dd"));
 
+            var hitCountMainViewModelList = new List<HitCountMainViewModel>();
             var finalGoalList = GetFinalGoals().GoalName;
-            var hitCountViewModel = new List<HitCountViewModel>();
 
-            foreach(var goal in finalGoalList)
-            {
-                hitCountViewModel.Add(new HitCountViewModel { GoalName = goal});
-            }
             
             foreach (var date in dateList)
             {
-                foreach(var item in organizationData)
+                var hitCountMainVM = new HitCountMainViewModel();
+                hitCountMainVM.HitCountList = new List<HitCountViewModel>();
+
+                var hitCountViewModel = new List<HitCountViewModel>();
+
+                foreach (var goal in finalGoalList)
+                {
+                    hitCountViewModel.Add(new HitCountViewModel { GoalName = goal });
+                }
+
+                foreach (var item in organizationData)
                 {
                     var val = item.Value;
                     string createdDate = Convert.ToDateTime(item.Value.CreatedDateTime).ToString("yyyy-MM-dd");
@@ -308,7 +351,13 @@ namespace UserExperienceAnalizer.API.UserExperienceAnalizer.Services
                     }
                 }
 
+                hitCountMainVM.Date = date;
+                hitCountMainVM.HitCountList = hitCountViewModel;
+
+                hitCountMainViewModelList.Add(hitCountMainVM);
             }
+
+            return hitCountMainViewModelList;
         }
     }
 }
