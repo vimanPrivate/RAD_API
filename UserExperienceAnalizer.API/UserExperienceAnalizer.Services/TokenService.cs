@@ -13,7 +13,7 @@ namespace UserExperienceAnalizer.API.UserExperienceAnalizer.Services
     {
         public string GetToken()
         {
-            string secretKey = "your_secret_key_here";
+            string secretKey = "@Rad_3838_API_UexAnalyser";
             var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
             var signingCredentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256);
 
