@@ -19,6 +19,7 @@ namespace UserExperienceAnalizer.API.Models
     public class GeneralInfo
     {
         public int TodayApplicationUsageCount { get; set; }
+        public double UserAverageTimeOnApplication { get; set; }
     }
 
     public class FinalGoalAverageTime
