@@ -48,7 +48,6 @@ namespace UserExperienceAnalizer.API
                 else
                     throw new Exception(message);
             }
-
         }
 
         public static void ValidateScreenName(string screenName)
