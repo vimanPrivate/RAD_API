@@ -27,16 +27,16 @@ namespace UserExperienceAnalizer.API
         {
             if (String.IsNullOrEmpty(time.ToString()))
                 throw new Exception("Start Time Cannot be empty");
-            //else if (time.Length != 8)
-            //    throw new Exception("Invalid 'Start Time'. Expected :- 'HH:MM:ss'");
+            else if (time.Length != 8)
+                throw new Exception("Invalid 'Start Time'. Value you entered is '" + time + "' Expected :- 'HH:MM:ss'");
         }
 
         public static void ValidateEndTime(string time)
         {
             if (String.IsNullOrEmpty(time.ToString()))
                 throw new Exception("End Time Cannot be empty");
-            //else if (time.Length != 8)
-            //    throw new Exception("Invalid 'End Time'. Expected :- 'HH:MM:ss'");
+            else if (time.Length != 8)
+                throw new Exception("Invalid 'End Time'. Value you entered is '"+time+"' Expected :- 'HH:MM:ss'");
         }
 
         public static void ValidateOraganization(string organization, string message = null)
