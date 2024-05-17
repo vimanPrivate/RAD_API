@@ -84,8 +84,51 @@ namespace UserExperienceAnalizer.API.UserExperienceAnalizer.Services
             var model = new GeneralInfo();
 
             model.TodayApplicationUsageCount = GetTodayLoggedInCount();
+            model.UserAverageTimeOnApplication = GetAverageTimeOnTheApp().TotalSeconds;
 
             return model;
+        }
+
+        private TimeSpan GetAverageTimeOnTheApp()
+        {
+            var timeDicionary = new Dictionary<Guid, TimeSpan>();
+
+            foreach(var item in organizationData)
+            {
+                var value = item.Value;
+
+                if (value.ScreenName == "Init")
+                    continue;
+
+                var sTime = Convert.ToDateTime(value.StartDate + " " + value.StartTime);
+                var eTime = Convert.ToDateTime(value.EndDate + " " + value.EndTime);
+
+                var dif = eTime - sTime;
+
+                if (timeDicionary.ContainsKey(value.Id))
+                {
+                    var pair = timeDicionary.Where(x => x.Key == value.Id).FirstOrDefault();
+                    var timeSpan = pair.Value;
+                    
+                    timeSpan = timeSpan + dif;
+                    timeDicionary[value.Id] = timeSpan;
+                }
+                else
+                {
+                    timeDicionary.Add(value.Id, dif);
+                }         
+            }
+
+            TimeSpan totalTimeOnApp = new TimeSpan(0, 0, 0);
+           
+            foreach(var time in timeDicionary.Values)
+            {
+                totalTimeOnApp = totalTimeOnApp + time;
+            }
+
+            var average = DivideTimeSpan(totalTimeOnApp, timeDicionary.Count);
+
+            return average;
         }
 
         private int GetTodayLoggedInCount()
@@ -317,7 +360,7 @@ namespace UserExperienceAnalizer.API.UserExperienceAnalizer.Services
         {
             var dateList = new List<string>();
 
-            for (int x = 0; x <= 6; x++)
+            for (int x = 0; x <= 30; x++)
                 dateList.Add(DateTime.Now.AddDays(-x).ToString("yyyy-MM-dd"));
 
             var hitCountMainViewModelList = new List<HitCountMainViewModel>();
