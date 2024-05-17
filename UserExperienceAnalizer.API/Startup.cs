@@ -28,6 +28,16 @@ namespace UserExperienceAnalizer.API
         {
             services.AddSingleton<GlobalVar>();
             services.AddControllers();
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowReactFrontend",
+                    builder =>
+                    {
+                        builder.WithOrigins("http://localhost:3000")
+                               .AllowAnyHeader()
+                               .AllowAnyMethod();
+                    });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -41,6 +51,9 @@ namespace UserExperienceAnalizer.API
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            // Enable CORS
+            app.UseCors("AllowReactFrontend");
 
             app.UseAuthorization();
 
